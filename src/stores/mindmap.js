@@ -225,6 +225,20 @@ export const useMindmapStore = defineStore('mindmap', () => {
     save()
   }
 
+  const centerNodeInViewport = (nodeId, containerWidth = 1200, containerHeight = 800) => {
+    const node = mindmap.value.nodes[nodeId]
+    if (!node) return
+    const scale = mindmap.value.viewport.scale
+    const nodeSize = { width: Math.max(80, node.text.length * 12 + 24), height: 40 }
+    const nodeCenterX = node.x + nodeSize.width / 2
+    const nodeCenterY = node.y + nodeSize.height / 2
+    const targetX = containerWidth / 2 - nodeCenterX * scale
+    const targetY = containerHeight / 2 - nodeCenterY * scale
+    mindmap.value.viewport = { x: targetX, y: targetY, scale }
+    save()
+    return { x: targetX, y: targetY, scale }
+  }
+
   const getNodesInOrder = computed(() => {
     if (!mindmap.value) return []
     return getTreeHierarchy(mindmap.value.nodes, mindmap.value.rootNodeId)
@@ -275,6 +289,7 @@ export const useMindmapStore = defineStore('mindmap', () => {
     startEditing,
     stopEditing,
     setViewport,
+    centerNodeInViewport,
     getSiblings,
     importMindmap,
     createNew

@@ -229,7 +229,7 @@ const onThemeChange = (e) => {
  mindmapStore.applyTheme(e.target.value);
 };
 const onStartPresentation = () => {
- presentationStore.start();
+  presentationStore.start(window.innerWidth, window.innerHeight);
 };
 const onImport = () => {
  fileInput.value?.click();

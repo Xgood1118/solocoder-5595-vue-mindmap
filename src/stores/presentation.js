@@ -20,11 +20,11 @@ export const usePresentationStore = defineStore('presentation', () => {
     return mindmapStore.getNodesInOrder.length
   })
 
-  const start = () => {
+  const start = (containerWidth, containerHeight) => {
     isActive.value = true
     currentIndex.value = 0
     isPaused.value = false
-    focusCurrentNode()
+    focusCurrentNode(containerWidth, containerHeight)
     startAutoPlay()
   }
 
@@ -33,18 +33,18 @@ export const usePresentationStore = defineStore('presentation', () => {
     stopAutoPlay()
   }
 
-  const next = () => {
+  const next = (containerWidth, containerHeight) => {
     const mindmapStore = useMindmapStore()
     if (currentIndex.value < totalNodes.value - 1) {
       currentIndex.value++
-      focusCurrentNode()
+      focusCurrentNode(containerWidth, containerHeight)
     }
   }
 
-  const prev = () => {
+  const prev = (containerWidth, containerHeight) => {
     if (currentIndex.value > 0) {
       currentIndex.value--
-      focusCurrentNode()
+      focusCurrentNode(containerWidth, containerHeight)
     }
   }
 
@@ -66,17 +66,20 @@ export const usePresentationStore = defineStore('presentation', () => {
     }
   }
 
-  const goTo = (index) => {
+  const goTo = (index, containerWidth, containerHeight) => {
     if (index >= 0 && index < totalNodes.value) {
       currentIndex.value = index
-      focusCurrentNode()
+      focusCurrentNode(containerWidth, containerHeight)
     }
   }
 
-  const focusCurrentNode = () => {
+  const focusCurrentNode = (containerWidth, containerHeight) => {
     const mindmapStore = useMindmapStore()
     if (currentNode.value) {
       mindmapStore.selectNode(currentNode.value.id)
+      if (containerWidth && containerHeight) {
+        mindmapStore.centerNodeInViewport(currentNode.value.id, containerWidth, containerHeight)
+      }
     }
   }
 

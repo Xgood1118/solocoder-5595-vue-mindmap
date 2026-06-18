@@ -22,6 +22,8 @@ const onKeyDown = (e) => {
   const ctrlPressed = e.ctrlKey || e.metaKey
 
   if (isPresentationActive.value) {
+    const cw = window.innerWidth
+    const ch = window.innerHeight
     if (e.key === ' ') {
       e.preventDefault()
       presentationStore.togglePause()
@@ -29,12 +31,12 @@ const onKeyDown = (e) => {
     }
     if (e.key === 'ArrowLeft') {
       e.preventDefault()
-      presentationStore.prev()
+      presentationStore.prev(cw, ch)
       return
     }
     if (e.key === 'ArrowRight') {
       e.preventDefault()
-      presentationStore.next()
+      presentationStore.next(cw, ch)
       return
     }
     if (e.key === 'Escape') {
